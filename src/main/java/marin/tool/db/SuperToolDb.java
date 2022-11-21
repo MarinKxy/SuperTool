@@ -1,9 +1,13 @@
 package marin.tool.db;
 
 import marin.tool.db.bo.DbConnectionBo;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author :Marin Wu
@@ -16,7 +20,7 @@ public class SuperToolDb {
      * 和数据库建立连接
      * @return 数据库连接对象
      */
-    public Connection getDbConnection(DbConnectionBo dbConnectionBo)  {
+    private Connection dbConnection(DbConnectionBo dbConnectionBo)  {
         //定义数据库连接对象
         Connection conn = null;
         try {
@@ -30,6 +34,56 @@ public class SuperToolDb {
     }
 
 
+    /**
+     * 查询所有的数据
+     * @return 返回查询结果
+     */
+    public List<Map<String,Object>> dbSelectAllList(DbConnectionBo dbConnectionBo){
+        //1、建立连接
+        Connection conn = dbConnection(dbConnectionBo);
+        //2、QueryRunner对象生成
+        QueryRunner queryRunner = new QueryRunner();
+        //3、执行sql
+        List<Map<String,Object>> data = null;
+        try {
+            data = queryRunner.query(conn,dbConnectionBo.getSql(),new MapListHandler());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return data;
+    }
+
+
+    /**
+     * 修改数据库数据操作（插入、修改、删除）
+     */
+    public int db(DbConnectionBo dbConnectionBo){
+        Integer result = null;
+        //1、建立连接
+        Connection conn = dbConnection(dbConnectionBo);
+        //2、QueryRunner对象生成
+        QueryRunner queryRunner = new QueryRunner();
+        //3、执行sql
+        try {
+            result = queryRunner.update(conn,dbConnectionBo.getSql());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            //关闭连接
+            try {
+                conn.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return result;
+    }
 
 
 }

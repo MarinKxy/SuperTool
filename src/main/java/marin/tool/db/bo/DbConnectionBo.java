@@ -17,4 +17,6 @@ public class DbConnectionBo {
     String driver;  //数据库驱动
     String databases; //数据库库名
     String setting; //数据库连接串
+    String sql;
+
 }
