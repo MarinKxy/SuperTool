@@ -3,7 +3,7 @@ HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
-!**/src/test/**
+src/test/**
 logs
 .log
 */logs
@@ -31,7 +31,6 @@ _svn
 *.iws
 *.iml
 *.ipr
- 
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
